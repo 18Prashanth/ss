@@ -1,0 +1,146 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+char str[15],stk[15];
+int IP=0,SP=0,len,i;
+char temp[3];
+char act[15];
+void check();
+void main()
+{
+printf("\n\t\t SHIFT REDUCE PARSER\n");
+printf("\nGrammer\n");
+printf("E->E+T|T\nT->T*F|F\nF->(E)|id\n");
+printf("enter the input string:\t");
+scanf("%s",str);
+printf("\n\tstack implimentation table\n");
+printf("\nStack\t\tinput symbol\t\taction");
+printf("\n$\t\t%s$\t\t--",str);
+strcpy(act,"shift");
+if(str[IP]=='(')
+{
+temp[0]=str[IP];
+temp[1]='\0';
+}
+else
+{
+temp[0]=str[IP];
+temp[1]=str[IP+1];
+temp[2]='\0';
+}
+strcat(act,temp);
+len=strlen(str);
+for(i=0;i<len;i++)
+{
+if(str[IP]=='i'&&str[IP+1]=='d')
+{
+stk[SP]=str[IP];
+SP++;
+str[IP]=' ';
+IP++;
+stk[SP]=str[IP];
+stk[SP+1]='\0';
+str[IP]=' ';
+IP++;
+}
+else
+{
+stk[SP]=str[IP];
+stk[SP+1]='\0';
+str[IP]=' ';
+IP++;
+}
+printf("\n$%s\t\t%s$\t\t%s",stk,str,act);
+strcpy(act,"shift");
+if(str[IP]=='('||str[IP]=='*'||str[IP]=='+'||str[IP]==')')
+{
+temp[0]=str[IP];
+temp[1]='\0';
+}
+else
+{
+temp[0]=str[IP];
+temp[1]=str[IP+1];
+temp[2]='\0';
+}
+strcat(act,temp);
+check();
+SP++;
+}
+SP++;
+check();
+}
+void check()
+{
+int flag=0;
+while(1)
+{
+if(stk[SP]=='d'&&stk[SP-1]=='i')
+{
+stk[SP-1]='F';
+stk[SP]='\0';
+SP--;
+flag=1;
+printf("\n$%s\t\t%s$\t\tF->id",stk,str);
+}
+if(stk[SP]==')'&&stk[SP-1]=='E'&&stk[SP-2]=='(')
+{
+stk[SP-2]='F';
+stk[SP-1]='\0';
+flag=1;
+SP=SP-2;
+printf("\n$%s\t\t%s$\t\tF->(E)",stk,str);
+}
+if(stk[SP]=='F'&&stk[SP-1]=='*'&&stk[SP-2]=='T')
+{
+stk[SP-2]='T';
+stk[SP-1]='\0';
+SP=SP-2;
+flag=1;
+printf("\n$%s\t\t%s$\t\tT->T*F",stk,str);
+}
+else
+{
+if(stk[SP]=='F')
+{
+stk[SP]='T';
+flag=1;
+printf("\n$%s\t\t%s$\t\tT->F",stk,str);
+}
+}
+if(stk[SP]=='T'&&stk[SP-1]=='+'&&stk[SP-2]=='E'&&str[IP]!='*')
+{
+stk[SP-2]='E';
+stk[SP-1]='\0';
+SP=SP-2;
+flag=1;
+printf("\n$%s\t\t%s$\t\tE->E+T",stk,str);
+}
+else if((stk[SP]=='T'&&str[IP]=='+')|| (stk[0]=='T'&&str[IP]=='\0')|| (stk[SP]=='T'&&str[IP]==')'))
+{
+stk[SP]='E';
+flag=1;
+printf("\n$%s\t\t%s$\t\tE->T",stk,str);
+}
+else
+{
+    if((stk[SP]=='T'&&str[IP]=='*')|| (stk[SP]=='E'&& str[IP]==')')|| (stk[SP]=='E'&& str[IP]=='+')|| (stk[SP]=='+'&& str[IP]=='i'&&str[IP+1]=='d')|| (stk[SP]=='('&& str[IP]=='i'&&str[IP+1]=='d')|| (stk[SP]=='*'&& str[IP]=='i'&&str[IP+1]=='d')|| (stk[SP]=='('&& str[IP]=='(')|| (stk[SP]=='*'&& str[IP]=='(')|| (stk[SP]=='+'&& str[IP]=='('))
+    {
+    flag=2;
+    }
+}
+if((strcmp(stk,"E")==0)&&str[IP]=='\0')
+{
+printf("\n$%s\t\t%s$\t\tAccept",stk,str);
+exit(0);
+}
+if(flag==0)
+{
+printf("\n$%s\t\t%s$\t\treject",stk,str);
+exit(0);
+}
+if(flag==2)
+return;
+flag=0;
+}
+}

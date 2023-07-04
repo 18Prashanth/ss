@@ -1,0 +1,13 @@
+lex part
+
+lex 1a.c
+cc lex.yy.c -ll
+./a.out
+
+
+
+both lex and yacc
+
+lex 2.l
+cc y.tab.c lex.yy.c -ll
+yacc -d 2.y

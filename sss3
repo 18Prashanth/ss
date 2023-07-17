@@ -1,0 +1,187 @@
+#include<stdio.h> 
+#include<string.h> 
+char new1[10],new2[10],new3[10],newstr[10]; 
+char a1[20]="A->aBa",b[20]="matched a",c[20]="B->bB",d[30]="matched b";
+char e[30]="B->bB", f[30]="matched b",g[30]="B->epsilon",h[30]="matched a"; 
+void first1(); 
+void second(); 
+void third(); 
+void fourth(); 
+void fifth(); 
+void sixth(); 
+void seventh(); 
+void eighth(); 
+void first(); 
+void follow(); 
+void table(); 
+void main() 
+{ 
+char stk[30]="A",a[30]="abba",m[30]; 
+printf("\n------------------------------------------------------\n"); 
+printf("FIRST SET \n"); 
+printf("\n------------------------------------------------------\n"); 
+printf("\n Given grammar is A->aBa\n B->bB\n B->e\n"); 
+printf("\n epsilon is shown as e\n"); 
+first(); 
+//parsing 
+puts("LL(1) Table is: M[A,a]=A->aBa\n M[B,a]=B->epsilon\n M[B,b]=B->bB\n"); 
+printf("\n----------------------------------------------------\n"); 
+printf("PARSING THE INPUT \n"); 
+printf("\n------------------------------------------------------\n"); 
+puts("for the string abba parse table is as shown "); 
+printf("\nMatched\tstack\tinput\taction"); 
+printf("\n--------------------------------\n"); 
+printf("\n -\t %s$\t %s$\t -\n",stk,a); 
+first1(); 
+} 
+void first() 
+{ 
+    char str1[20]="A->aBa", str2[20]="B->bB", str3[20]="B->e"; 
+    if(((str1[3]>=97)&&(str1[3]<=122))||(str1[3]=='e')) 
+    printf("\n FIRST(A)=%c",str1[3]); 
+    new1[0]=str1[3]; 
+    if(((str2[3]>=97)&&(str2[3]<=122))||(str2[3]=='e')) 
+    printf("\n FIRST(B)=%c",str2[3]); 
+    new2[0]=str2[3]; 
+    if(((str3[3]>=97)&&(str3[3]<=122))||(str3[3]=='e'))
+    printf("\n FIRST(B)=%c",str3[3]); 
+    new3[0]=str3[3]; 
+    follow(); 
+} 
+ 
+void follow() 
+{ 
+    char str1[20]="A->aBa",str2[20]="B->bB",str3[20]="B->e"; 
+    int n1=6,n2=5,n3=4,i,j,k; 
+    printf("\n-------------------------------------------------\n"); 
+    printf("FOLLOW SET \n"); 
+    printf("\n-------------------------------------------------\n"); 
+    for(i=3;i<n1;i++) 
+    { 
+        if((str1[i]=='A')||(str2[i]=='A')||(str3[i]=='A')) 
+        { 
+            printf("\n FOLLOW(A)=%c\n",str1[5]); 
+            printf("\n FOLLOW(A)=%c\n",str2[4]); 
+            printf("\n FOLLOW(A)=%c\n",str3[3]); 
+        } 
+    } 
+    
+    void table() 
+    {        
+        printf("\n-------------------------------------------------\n"); 
+        printf("PREDICTIVE PARSING TABLE LL(1) \n"); 
+        printf("\n-------------------------------------------------\n");     
+        
+        printf("\n the first production is A->aBa\n"); 
+        if((new1[0]>=97)&&(new1[0]<=122)) 
+        printf("M[A,%c]=A->aBa",new1[0]); 
+        printf("\n the second production is B->bB\n"); 
+        if((new2[0]>=97)&&(new2[0]<=122)) 
+        printf("M[B,%c]=B->bB",new2[0]); 
+        printf("\n third production is B->e\n"); 
+        if((new3[0]>=97)&&(new3[0]<=122)) 
+        { 
+            printf("M[B,%c]=B->e",new3[0]); 
+        } 
+        else 
+            printf("M[B,%c]=B->e",newstr[0]); 
+    } 
+
+
+
+    printf("\n FOLLOW(A)=$\n"); 
+    for(i=3;i<n1;i++) 
+    { 
+        if(str1[i]=='B') 
+        printf("FOLLOW(B)=%c",str1[5]); 
+        newstr[0]=str1[5]; 
+    } 
+    for(j=3;j<n2;j++)
+    { 
+        if(str2[j]=='B') 
+        printf("\nFOLLOW(B)=%c",str2[5]); 
+        newstr[1]=str2[5]; 
+    } 
+    for(k=3;k<n3;k++) 
+    {
+        if(str3[k]=='B') 
+        printf("\nFOLLOW(B)=%c",str3[4]); 
+        newstr[2]=str3[4]; 
+    } 
+    if((newstr[0]=='\0')&&(newstr[1]=='\0')&&(newstr[2]=='\0')) 
+    printf("\n FOLLOW(B)=$\n"); 
+    table(); 
+} 
+ 
+void first1() 
+{ 
+ char stk[30]="A",a[30]="abba"; 
+ stk[0]='a';
+ stk[1]='B'; 
+ stk[2]='a'; 
+ stk[3]='\0'; 
+ printf("\n -\t %s$\t %s$\t %s\t\n",stk,a,a1); 
+ second(); 
+} 
+void second() 
+{ 
+ char stk[30]="aBa",a[30]="abba"; 
+ stk[0]='B'; 
+ stk[1]='a'; 
+ stk[2]='\0'; 
+ a[0]=' '; 
+ printf("\n a\t %s$\t %s$\t %s\t\n",stk,a,b); 
+ third(); 
+} 
+void third() 
+{ 
+ char stk[30]="Ba",a[30]="bba"; 
+ stk[0]='b'; 
+ stk[1]='B'; 
+ stk[2]='a'; 
+ stk[3]='\0'; 
+ printf("\n a\t %s$\t %s$\t %s\t\n",stk,a,c); 
+ fourth(); 
+} 
+void fourth() 
+{ 
+ char stk[30]="bBa",a[30]="bba"; 
+ stk[0]='B'; 
+ stk[1]='a'; 
+ stk[2]='\0'; 
+ a[0]=' '; 
+ printf("\n ab\t %s$\t %s$\t %s\t\n",stk,a,d); 
+ fifth(); 
+} 
+void fifth() 
+{ 
+ char stk[30]="Ba", a[30]="ba"; 
+ stk[0]='b'; 
+ stk[1]='B'; 
+ stk[2]='a'; 
+ stk[3]='\0'; 
+ printf("\n ab\t %s$\t %s$\t %s\t\n",stk,a,e); 
+ sixth(); 
+} 
+void sixth() 
+{ 
+char stk[30]="bBa",a[30]="ba"; 
+stk[0]=' '; 
+a[0]=' '; 
+printf("\n abb\t %s$\t %s$\t %s\t\n",stk,a,f); 
+seventh(); 
+} 
+void seventh() 
+{ 
+char stk[30]="Ba",a[30]="a"; 
+stk[0]=' '; 
+printf("\n abb\t %s$\t %s$\t %s\t\n",stk,a,g); 
+eighth(); 
+} 
+void eighth() 
+{ 
+char stk[30]="a",a[30]="a"; 
+stk[2]=' '; 
+a[0]=' '; 
+printf("\n abba\t $\t $\t %s\t\n",h); 
+}
